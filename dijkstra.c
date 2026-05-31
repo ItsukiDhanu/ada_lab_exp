@@ -22,36 +22,29 @@ void dijkstra(int cost[MAX][MAX], int n, int source)
         min = INF;
 
         for(j = 0; j < n; j++)
-        {
             if(visited[j] == 0 && dist[j] < min)
             {
                 min = dist[j];
                 u = j;
             }
-        }
 
         visited[u] = 1;
 
         for(j = 0; j < n; j++)
-        {
-            if(visited[j] == 0 &&
-               dist[u] + cost[u][j] < dist[j])
+            if(visited[j] == 0 && (dist[u] + cost[u][j] < dist[j]))
             {
                 dist[j] = dist[u] + cost[u][j];
                 path[j] = u;
             }
-        }
     }
 
     printf("\nShortest Paths:\n");
 
     for(i = 0; i < n; i++)
-    {
         if(i != source)
         {
             printf("%d -> %d = %d\n", source, i, dist[i]);
         }
-    }
 }
 
 int main()
@@ -65,15 +58,8 @@ int main()
     printf("Enter cost matrix:\n");
 
     for(int i = 0; i < n; i++)
-    {
         for(int j = 0; j < n; j++)
-        {
             scanf("%d", &cost[i][j]);
-
-            if(cost[i][j] == 0)
-                cost[i][j] = INF;
-        }
-    }
 
     printf("Enter source vertex: ");
     scanf("%d", &source);

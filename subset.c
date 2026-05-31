@@ -1,66 +1,51 @@
 #include <stdio.h>
 
-int set[20], subset[20];
+int set[20], x[20];
 int n, target, count = 0;
 
-// Function to find subsets
-void subsetSum(int index, int currentSum)
+void subset(int index, int sum)
 {
-    // If target is reached
-    if (currentSum == target)
+    if(sum == target)
     {
-        count++;
+        printf("Solution %d = { ", ++count);
 
-        printf("Solution %d = { ", count);
-
-        for (int i = 0; i < n; i++)
-        {
-            if (subset[i] == 1)
+        for(int i = 0; i < n; i++)
+            if(x[i] == 1)
                 printf("%d ", set[i]);
-        }
 
         printf("}\n");
         return;
     }
 
-    // If sum exceeds target or all elements checked
-    if (index == n || currentSum > target)
+    if(index == n || sum > target)
         return;
 
-    // Include current element
-    subset[index] = 1;
-    subsetSum(index + 1, currentSum + set[index]);
+    x[index] = 1;
+    subset(index + 1, sum + set[index]);
 
-    // Exclude current element
-    subset[index] = 0;
-    subsetSum(index + 1, currentSum);
+    x[index] = 0;
+    subset(index + 1, sum);
 }
 
 int main()
 {
-    printf("----- Subset Sum Problem -----\n");
-
-    // Input number of elements
     printf("Enter number of elements: ");
     scanf("%d", &n);
 
-    // Input set elements
     printf("Enter elements:\n");
-    for (int i = 0; i < n; i++)
+
+    for(int i = 0; i < n; i++)
         scanf("%d", &set[i]);
 
-    // Input target sum
     printf("Enter target sum: ");
     scanf("%d", &target);
 
     printf("\nPossible subsets are:\n");
 
-    // Start recursion
-    subsetSum(0, 0);
+    subset(0, 0);
 
-    // If no subset found
-    if (count == 0)
+    if(count == 0)
         printf("No subset possible!\n");
 
     return 0;
-} 
+}

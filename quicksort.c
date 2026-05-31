@@ -54,12 +54,13 @@ int main(void)
 
 	clock_t start = clock();
 	quickSort(a, 0, n - 1);
-	// simple display function used below
+
 	for (int i = 0; i < n; i++)
 		printf("%d ", a[i]);
+
 	printf("\n");
 	clock_t end = clock();
-	double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC * 1000; // in milliseconds
+	double time_taken = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
 	printf("\nTime taken to sort %d elements: %f milliseconds\n", n, time_taken);
 	return 0;
 }

@@ -2,34 +2,39 @@
 
 #define MAX 100
 
-void dfs(int v, int n, int graph[MAX][MAX], int visited[MAX], int order[MAX], int *top)
+int graph[MAX][MAX];
+int visited[MAX], stack[MAX];
+int top = -1, n;
+
+void dfs(int v)
 {
-	visited[v] = 1;
-	for (int i = 0; i < n; i++)
-		if (graph[v][i] && !visited[i])
-			dfs(i, n, graph, visited, order, top);
-	order[++(*top)] = v;
+    visited[v] = 1;
+
+    for(int i = 0; i < n; i++)
+        if(graph[v][i] && !visited[i])
+            dfs(i);
+
+    stack[++top] = v;
 }
 
-int main(void)
+int main()
 {
-	int n, graph[MAX][MAX] = {0}, visited[MAX] = {0}, order[MAX], top = -1;
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
 
-	printf("Enter the number of vertices: ");
-	scanf("%d", &n);
+    printf("Enter adjacency matrix:\n");
 
-	printf("Enter the adjacency matrix (rows of 0/1):\n");
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-			scanf("%d", &graph[i][j]);
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            scanf("%d", &graph[i][j]);
 
-	for (int i = 0; i < n; i++)
-		if (!visited[i])
-			dfs(i, n, graph, visited, order, &top);
+    for(int i = 0; i < n; i++)
+        if(!visited[i])
+            dfs(i);
 
-	printf("Topological Sort Order:\n");
-	while (top >= 0)
-		printf("%d ", order[top--]);
-	printf("\n");
-	return 0;
+    printf("\nTopological Sort:\n");
+    while(top >= 0)
+        printf("%d ", stack[top--]);
+
+    return 0;
 }

@@ -1,60 +1,49 @@
 #include <stdio.h>
 
 #define MAX 10
-#define INF 9999
+#define INF 999
 
-void prim(int n, int cost[MAX][MAX])
+int main()
 {
-	int parent[MAX], key[MAX], used[MAX] = {0};
+    int n, cost[MAX][MAX];
+    int visited[MAX] = {0};
+    int edges = 0, total = 0;
 
-	for (int i = 0; i < n; i++)
-	{
-		key[i] = INF;
-		parent[i] = -1;
-	}
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
 
-	key[0] = 0;
+    printf("Enter cost matrix:\n");
 
-	for (int i = 0; i < n; i++)
-	{
-		int u = -1;
-		for (int v = 0; v < n; v++)
-			if (!used[v] && (u == -1 || key[v] < key[u]))
-				u = v;
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            scanf("%d", &cost[i][j]);
 
-		if (u == -1) break;
-		used[u] = 1;
+    visited[0] = 1;
 
-		for (int v = 0; v < n; v++)
-			if (!used[v] && cost[u][v] != 0 && cost[u][v] < key[v])
-			{
-				key[v] = cost[u][v];
-				parent[v] = u;
-			}
-	}
+    printf("\nEdges in Minimum Spanning Tree:\n");
 
-	int total = 0;
-	for (int v = 1; v < n; v++)
-	{
-		if (parent[v] == -1)
-		{
-			printf("Spanning tree does not exist\n");
-			return;
-		}
-		total += cost[v][parent[v]];
-		printf("%d -- %d (cost %d)\n", parent[v], v, cost[v][parent[v]]);
-	}
-	printf("Total cost: %d\n", total);
-}
+    while(edges < n - 1)
+    {
+        int min = INF;
+        int a = -1, b = -1;
 
-int main(void)
-{
-	int n, cost[MAX][MAX];
-	scanf("%d", &n);
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-			scanf("%d", &cost[i][j]);
+        for(int i = 0; i < n; i++)
+            if(visited[i] == 1)
+                for(int j = 0; j < n; j++)
+                    if(visited[j] == 0 && cost[i][j] < min)
+                    {
+                        min = cost[i][j];
+                        a = i;
+                        b = j;
+                    }
 
-	prim(n, cost);
-	return 0;
+        printf("%d --> %d = %d\n", a, b, min);
+
+        total += min;
+        visited[b] = 1;
+        edges++;
+    }
+
+    printf("\nMinimum Cost = %d\n", total);
+    return 0;
 }

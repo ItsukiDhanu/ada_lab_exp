@@ -30,15 +30,13 @@ int main()
     printf("\nKnapsack Problem using Greedy Method :\n");
 
     for (i = 0; i < num ; i++)
-    {
         if (weight[i] > capacity)
-        break;
+            break;
         else
         {
             Totalvalue += profit[i];
             capacity -= weight[i];
         }
-    }
     if (i < num)
         Totalvalue += ratio[i] * capacity;
 
