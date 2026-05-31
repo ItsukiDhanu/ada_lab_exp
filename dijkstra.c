@@ -1,95 +1,84 @@
 #include <stdio.h>
-
 #define MAX 10
-#define INF 99999
+#define INF 999
 
-void dijkstra(int cost[MAX][MAX], int n, int source, int dist[MAX], int parent[MAX])
+void dijkstra(int cost[MAX][MAX], int n, int source)
 {
-	int visited[MAX] = {0};
+    int dist[MAX], visited[MAX], path[MAX];
+    int i, j, min, u;
 
-	for (int i = 0; i < n; i++)
-	{
-		dist[i] = cost[source][i];
-		parent[i] = (i != source && cost[source][i] < INF) ? source : -1;
-	}
+    for(i = 0; i < n; i++)
+    {
+        dist[i] = cost[source][i];
+        visited[i] = 0;
+        path[i] = source;
+    }
 
-	dist[source] = 0;
-	visited[source] = 1;
+    dist[source] = 0;
+    visited[source] = 1;
 
-	for (int step = 1; step < n; step++)
-	{
-		int u = -1, best = INF;
+    for(i = 1; i < n; i++)
+    {
+        min = INF;
 
-		for (int i = 0; i < n; i++)
-			if (!visited[i] && dist[i] < best)
-				best = dist[u = i];
+        for(j = 0; j < n; j++)
+        {
+            if(visited[j] == 0 && dist[j] < min)
+            {
+                min = dist[j];
+                u = j;
+            }
+        }
 
-		if (u == -1)
-			break;
+        visited[u] = 1;
 
-		visited[u] = 1;
+        for(j = 0; j < n; j++)
+        {
+            if(visited[j] == 0 &&
+               dist[u] + cost[u][j] < dist[j])
+            {
+                dist[j] = dist[u] + cost[u][j];
+                path[j] = u;
+            }
+        }
+    }
 
-		for (int v = 0; v < n; v++)
-			if (!visited[v] && cost[u][v] < INF && dist[u] + cost[u][v] < dist[v])
-			{
-				dist[v] = dist[u] + cost[u][v];
-				parent[v] = u;
-			}
-	}
+    printf("\nShortest Paths:\n");
+
+    for(i = 0; i < n; i++)
+    {
+        if(i != source)
+        {
+            printf("%d -> %d = %d\n", source, i, dist[i]);
+        }
+    }
 }
 
-void print_paths(int source, int n, int dist[MAX], int parent[MAX])
+int main()
 {
-	for (int v = 0; v < n; v++)
-	{
-		if (v == source)
-			continue;
+    int n, source;
+    int cost[MAX][MAX];
 
-		if (dist[v] >= INF)
-		{
-			printf("No path from %d to %d\n", source, v);
-			continue;
-		}
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
 
-		int path[MAX], len = 0;
-		for (int cur = v; cur != -1; cur = parent[cur])
-			path[len++] = cur;
+    printf("Enter cost matrix:\n");
 
-		printf("The shortest distance %d -> %d is: %d\n", source, v, dist[v]);
-		printf("The path is:\n");
-		for (int i = len - 1; i >= 0; i--)
-			printf(i == len - 1 ? "%d" : " -> %d", path[i]);
-		printf("\n");
-	}
-}
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            scanf("%d", &cost[i][j]);
 
-int main(void)
-{
-	int n, source;
-	int cost[MAX][MAX], dist[MAX], parent[MAX];
+            if(cost[i][j] == 0)
+                cost[i][j] = INF;
+        }
+    }
 
-	printf("**** DIJKSTRA'S ALGORITHM ******\n");
-	printf("Enter the number of nodes: ");
-	scanf("%d", &n);
+    printf("Enter source vertex: ");
+    scanf("%d", &source);
 
-	printf("Enter the cost matrix\n");
-	for (int i = 0; i < n; i++)
-		for (int j = 0; j < n; j++)
-			scanf("%d", &cost[i][j]);
+    dijkstra(cost, n, source);
 
-	printf("The entered cost matrix is\n");
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-			printf("%d\t", cost[i][j]);
-		printf("\n");
-	}
-
-	printf("Enter the source vertex: ");
-	scanf("%d", &source);
-
-	dijkstra(cost, n, source, dist, parent);
-	print_paths(source, n, dist, parent);
-	printf("\n********* *************** *********\n");
-	return 0;
+    return 0;
 }
