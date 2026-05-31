@@ -1,0 +1,22 @@
+# Ignore compiled binaries and temporary output files
+a.out
+*.out
+*.exe
+*.o
+/tmp/
+# Ignore common compiled program names used in this workspace
+quicksort
+mergesort
+prim
+kruskal
+floyd
+warshal
+dijkstra
+subset
+knapsackdp
+knapsackgreedy
+
+# Editor and OS files
+.DS_Store
+*.swp
+*.bak
